@@ -1,0 +1,18 @@
+[
+    { "name": "downIdle0", "x": 17, "y": 16, "width": 14, "height": 16 },
+    { "name": "downIdle1", "x": 65, "y": 16, "width": 14, "height": 16 },
+    { "name": "downWalk0", "x": 113, "y": 16, "width": 14, "height": 16 },
+    { "name": "downWalk1", "x": 161, "y": 16, "width": 14, "height": 16 },
+    { "name": "upIdle0", "x": 17, "y": 64, "width": 14, "height": 16 },
+    { "name": "upIdle1", "x": 65, "y": 64, "width": 14, "height": 16 },
+    { "name": "upWalk0", "x": 113, "y": 64, "width": 14, "height": 16 },
+    { "name": "upWalk1", "x": 161, "y": 64, "width": 14, "height": 16 },
+    { "name": "leftIdle0", "x": 19, "y": 112, "width": 10, "height": 16 },
+    { "name": "leftIdle1", "x": 67, "y": 112, "width": 10, "height": 16 },
+    { "name": "leftWalk0", "x": 115, "y": 112, "width": 10, "height": 16 },
+    { "name": "leftWalk1", "x": 163, "y": 112, "width": 10, "height": 16 },
+    { "name": "rightIdle0", "x": 18, "y": 160, "width": 10, "height": 16 },
+    { "name": "rightIdle1", "x": 67, "y": 160, "width": 10, "height": 16 },
+    { "name": "rightWalk0", "x": 115, "y": 160, "width": 10, "height": 16 },
+    { "name": "rightWalk1", "x": 163, "y": 160, "width": 10, "height": 16 }
+]
