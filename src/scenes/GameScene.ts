@@ -5,7 +5,7 @@ export default class Game extends Phaser.Scene {
     akey!: Phaser.Input.Keyboard.Key
     skey!: Phaser.Input.Keyboard.Key
     dkey!: Phaser.Input.Keyboard.Key
-    player!: Phaser.Physics.Matter.Sprite
+    player!: Phaser.Physics.Arcade.Sprite
     playerSpeed: number = 100
     playerDir!: string
     playerCam!: Phaser.Cameras.Scene2D.Camera
@@ -26,21 +26,14 @@ export default class Game extends Phaser.Scene {
         this.skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
         this.dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 
-        this.player = this.matter.add.sprite(467.5, 405, "player").setScale(0.25)
+        this.player = this.physics.add.sprite(467.5, 405, "player").setScale(0.25)
         this.player.state = 0
         this.playerDir = "down"
 
-        this.player.setBody(
-            {
-                type: "rectangle",
-                width: 10, //player hitbox
-                height: 13,
-            },
-            { render: { sprite: { xOffset: 0, yOffset: 0.23 } } }
-        )
-        // @ts-ignore
-        this.player.body.setIgnoreGravity(true)
-        this.player.setFixedRotation()
+        // Set body size for Arcade physics
+        this.player.body.setSize(10, 13) // player hitbox
+        this.player.body.offset.x = 0
+        this.player.body.offset.y = 0.23
 
         // create camera and set to follow player
         this.playerCam = this.cameras.main.setBounds(0, 0, 1280, 1280)
@@ -51,6 +44,7 @@ export default class Game extends Phaser.Scene {
 
     update() {
         // Player Movement
+        this.player.setVelocity(0)
         if (this.wkey.isDown) {
             this.player.setVelocityY(-this.playerSpeed)
             this.player.anims.play("upWalk", true)
@@ -58,7 +52,6 @@ export default class Game extends Phaser.Scene {
             this.player.setVelocityY(this.playerSpeed)
             this.player.anims.play("downWalk", true)
         } else {
-            this.player.setVelocityY(0)
             if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "upWalk")
                 this.player.anims.play("upIdle", true)
             if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "downWalk")
@@ -72,7 +65,6 @@ export default class Game extends Phaser.Scene {
             this.player.setVelocityX(this.playerSpeed)
             this.player.anims.play("rightWalk", true)
         } else {
-            this.player.setVelocityX(0)
             if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "leftWalk")
                 this.player.anims.play("leftIdle", true)
             if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "rightWalk")

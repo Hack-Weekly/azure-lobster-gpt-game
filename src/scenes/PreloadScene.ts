@@ -5,7 +5,7 @@ export default class Preload extends Phaser.Scene {
         super({ key: "Preload" })
     }
     preload() {
-        this.load.atlas("player", "public/player/playerSpritesheet.png", "public/player/playerAtlas.json")
+        this.load.atlas("player", "/public/player/playerSpritesheet.png", "/public/player/playerAtlas.json")
     }
 
     create() {
@@ -57,7 +57,5 @@ export default class Preload extends Phaser.Scene {
             frameRate: 8,
             repeat: -1,
         })
-
-        this.scene.start("Game")
     }
 }

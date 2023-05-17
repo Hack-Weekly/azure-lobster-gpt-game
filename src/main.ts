@@ -9,12 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 800,
     height: 600,
     physics: {
-        default: "matter",
-        matter: {
-            gravity: { x: 0, y: 0 },
-            debug: false, // toggle for hitboxes
-            enabled: true,
-        },
+        default: "arcade",
     },
     scene: [Preload, Game],
     pixelArt: true,
