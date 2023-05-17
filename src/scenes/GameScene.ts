@@ -7,7 +7,6 @@ export default class Game extends Phaser.Scene {
     dkey!: Phaser.Input.Keyboard.Key
     player!: Phaser.Physics.Arcade.Sprite
     playerSpeed: number = 100
-    playerDir!: string
     playerCam!: Phaser.Cameras.Scene2D.Camera
 
     constructor() {
@@ -17,6 +16,7 @@ export default class Game extends Phaser.Scene {
     preload() {}
 
     create() {
+        console.log("started game")
         // make it so right clicks don't open that menu pop up thing
         this.input.mouse.disableContextMenu()
 
@@ -26,11 +26,9 @@ export default class Game extends Phaser.Scene {
         this.skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
         this.dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 
-        this.player = this.physics.add.sprite(467.5, 405, "player").setScale(0.25)
-        this.player.state = 0
-        this.playerDir = "down"
+        this.player = this.physics.add.sprite(467.5, 405, "player")
 
-        // Set body size for Arcade physics
+        // set body size for Arcade physics
         this.player.body.setSize(10, 13) // player hitbox
         this.player.body.offset.x = 0
         this.player.body.offset.y = 0.23
