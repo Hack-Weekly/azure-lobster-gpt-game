@@ -8,8 +8,8 @@ export default class Game extends Phaser.Scene {
     dkey!: Phaser.Input.Keyboard.Key
     emitter!: EventDispatcher
     player!: Phaser.Physics.Arcade.Sprite
-    playerFacingDir: string = "down"
-    playerSpeed: number = 100
+    playerFacingDir = "down"
+    playerSpeed = 100
     playerCam!: Phaser.Cameras.Scene2D.Camera
 
     constructor() {

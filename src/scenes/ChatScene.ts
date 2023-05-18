@@ -10,6 +10,7 @@ export default class Chat extends Phaser.Scene {
     preload() {
         this.emitter = EventDispatcher.getInstance()
     }
-    create() {}
-    update() {}
+    create() {
+        console.log("Chat scene started")
+    }
 }
