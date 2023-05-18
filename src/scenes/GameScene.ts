@@ -6,6 +6,7 @@ export default class Game extends Phaser.Scene {
     skey!: Phaser.Input.Keyboard.Key
     dkey!: Phaser.Input.Keyboard.Key
     player!: Phaser.Physics.Arcade.Sprite
+    playerFacingDir: string = "down"
     playerSpeed: number = 100
     playerCam!: Phaser.Cameras.Scene2D.Camera
 
@@ -26,7 +27,7 @@ export default class Game extends Phaser.Scene {
         this.skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
         this.dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 
-        this.player = this.physics.add.sprite(467.5, 405, "player")
+        this.player = this.physics.add.sprite(467.5, 405, "player").setScale(3)
 
         // set body size for Arcade physics
         this.player.body.setSize(10, 13) // player hitbox
@@ -35,7 +36,7 @@ export default class Game extends Phaser.Scene {
 
         // create camera and set to follow player
         this.playerCam = this.cameras.main.setBounds(0, 0, 1280, 1280)
-        this.playerCam.zoom = 3 // camera zoom level - 3 default
+        // this.playerCam.zoom = 0 // camera zoom level
         // zooming the camera means that the top left of the screen is no longer positioned at (0,0)
         this.playerCam.startFollow(this.player)
     }
@@ -43,30 +44,33 @@ export default class Game extends Phaser.Scene {
     update() {
         // Player Movement
         this.player.setVelocity(0)
+
         if (this.wkey.isDown) {
             this.player.setVelocityY(-this.playerSpeed)
             this.player.anims.play("upWalk", true)
         } else if (this.skey.isDown) {
             this.player.setVelocityY(this.playerSpeed)
             this.player.anims.play("downWalk", true)
-        } else {
-            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "upWalk")
-                this.player.anims.play("upIdle", true)
-            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "downWalk")
-                this.player.anims.play("downIdle", true)
-        }
-
-        if (this.akey.isDown) {
+        } else if (this.akey.isDown) {
             this.player.setVelocityX(-this.playerSpeed)
             this.player.anims.play("leftWalk", true)
         } else if (this.dkey.isDown) {
             this.player.setVelocityX(this.playerSpeed)
             this.player.anims.play("rightWalk", true)
         } else {
-            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "leftWalk")
+            // Idle animations
+            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "upWalk") {
+                this.player.anims.play("upIdle", true)
+            }
+            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "downWalk") {
+                this.player.anims.play("downIdle", true)
+            }
+            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "leftWalk") {
                 this.player.anims.play("leftIdle", true)
-            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "rightWalk")
+            }
+            if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "rightWalk") {
                 this.player.anims.play("rightIdle", true)
+            }
         }
     }
 }
