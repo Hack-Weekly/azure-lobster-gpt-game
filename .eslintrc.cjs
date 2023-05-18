@@ -16,5 +16,7 @@ module.exports = {
         "@typescript-eslint/ban-ts-ignore": 0,
         "@typescript-eslint/member-delimiter-style": 0,
         "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-unused-vars": 1,
+        "@typescript-eslint/no-empty-function": 1,
     },
 }
