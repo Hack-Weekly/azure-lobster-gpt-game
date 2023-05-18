@@ -1,10 +1,12 @@
 import Phaser from "phaser"
+import EventDispatcher from "../utils/EventDispatcher"
 
 export default class Game extends Phaser.Scene {
     wkey!: Phaser.Input.Keyboard.Key
     akey!: Phaser.Input.Keyboard.Key
     skey!: Phaser.Input.Keyboard.Key
     dkey!: Phaser.Input.Keyboard.Key
+    emitter!: EventDispatcher
     player!: Phaser.Physics.Arcade.Sprite
     playerFacingDir: string = "down"
     playerSpeed: number = 100
@@ -14,7 +16,9 @@ export default class Game extends Phaser.Scene {
         super({ key: "Game" })
     }
 
-    preload() {}
+    preload() {
+        this.emitter = EventDispatcher.getInstance()
+    }
 
     create() {
         console.log("started game")
@@ -39,6 +43,9 @@ export default class Game extends Phaser.Scene {
         // this.playerCam.zoom = 0 // camera zoom level
         // zooming the camera means that the top left of the screen is no longer positioned at (0,0)
         this.playerCam.startFollow(this.player)
+
+        // start the Chat scene without ending the current scene
+        this.scene.launch("Chat")
     }
 
     update() {
