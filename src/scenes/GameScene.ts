@@ -27,6 +27,7 @@ export default class Game extends Phaser.Scene {
 
         // create tilemap for main map
         const map = this.make.tilemap({ key: "tilemap" })
+
         // add all tileset images to tilemap
         const waterObjects = map.addTilesetImage("waterObjects_", "waterObjects")
         const water = map.addTilesetImage("water_", "water")
@@ -43,10 +44,38 @@ export default class Game extends Phaser.Scene {
         const door = map.addTilesetImage("door_", "door")
         const bridge = map.addTilesetImage("bridge_", "bridge")
 
-        // create the layers we want in the right order
-        const groundLayer = map.createLayer("base layer", [plain, plainCliff, path]).setDepth(-2)
-        const bridgeLayer = map.createLayer("base 2", [plainDeco1, plainDeco2]).setDepth(-2)
-        const freeLayer = map.createLayer("free layer", plainDeco0).setDepth(-2)
+        // create the layers (order matters!)
+        const waterLayer = map.createLayer("water", [water]).setDepth(-1)
+        const baseLayer = map.createLayer("base", [house, grassHillWater]).setDepth(-1)
+        const hillsLayer = map.createLayer("hills", [house, grassHillWater, grassHillTiles, grassHillTall]).setDepth(-1)
+        const soilLayer = map.createLayer("soil", [soil]).setDepth(-1)
+        const greeneryLayer = map.createLayer("greenery", [plantsRocks, paths, waterObjects]).setDepth(-1)
+        const manmadeLayer = map.createLayer("manmade", [house, door, bridge]).setDepth(-1)
+        const fencesLayer = map.createLayer("fences", [fences]).setDepth(-1)
+        const furnitureLayer = map.createLayer("furniture", [furniture, mailbox]).setDepth(-1)
+        const roofLayer = map.createLayer("roof", [house]).setDepth(-1)
+
+        // create the collision boxes for each layer based on the custom property I set in the map editor
+        waterLayer.setCollisionByProperty({ collides: true })
+        baseLayer.setCollisionByProperty({ collides: true })
+        hillsLayer.setCollisionByProperty({ collides: true })
+        soilLayer.setCollisionByProperty({ collides: true })
+        greeneryLayer.setCollisionByProperty({ collides: true })
+        manmadeLayer.setCollisionByProperty({ collides: true })
+        fencesLayer.setCollisionByProperty({ collides: true })
+        furnitureLayer.setCollisionByProperty({ collides: true })
+        roofLayer.setCollisionByProperty({ collides: true })
+
+        // add the layers and collision boxes to the game world
+        this.matter.world.convertTilemapLayer(waterLayer)
+        this.matter.world.convertTilemapLayer(baseLayer)
+        this.matter.world.convertTilemapLayer(hillsLayer)
+        this.matter.world.convertTilemapLayer(soilLayer)
+        this.matter.world.convertTilemapLayer(greeneryLayer)
+        this.matter.world.convertTilemapLayer(manmadeLayer)
+        this.matter.world.convertTilemapLayer(fencesLayer)
+        this.matter.world.convertTilemapLayer(furnitureLayer)
+        this.matter.world.convertTilemapLayer(roofLayer)
 
         // movement controls
         this.wkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
