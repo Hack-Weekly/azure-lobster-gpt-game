@@ -25,6 +25,29 @@ export default class Game extends Phaser.Scene {
         // make it so right clicks don't open that menu pop up thing
         this.input.mouse.disableContextMenu()
 
+        // create tilemap for main map
+        const map = this.make.tilemap({ key: "tilemap" })
+        // add all tileset images to tilemap
+        const waterObjects = map.addTilesetImage("waterObjects_", "waterObjects")
+        const water = map.addTilesetImage("water_", "water")
+        const soil = map.addTilesetImage("soil_", "soil")
+        const plantsRocks = map.addTilesetImage("plantsRocks_", "plantsRocks")
+        const paths = map.addTilesetImage("paths_", "paths")
+        const mailbox = map.addTilesetImage("mailbox_", "mailbox")
+        const house = map.addTilesetImage("house_", "house")
+        const grassHillWater = map.addTilesetImage("grassHillWater_", "grassHillWater")
+        const grassHillTiles = map.addTilesetImage("grassHillTiles_", "grassHillTiles")
+        const grassHillTall = map.addTilesetImage("grassHillTall_", "grassHillTall")
+        const furniture = map.addTilesetImage("furniture_", "furniture")
+        const fences = map.addTilesetImage("fences_", "fences")
+        const door = map.addTilesetImage("door_", "door")
+        const bridge = map.addTilesetImage("bridge_", "bridge")
+
+        // create the layers we want in the right order
+        const groundLayer = map.createLayer("base layer", [plain, plainCliff, path]).setDepth(-2)
+        const bridgeLayer = map.createLayer("base 2", [plainDeco1, plainDeco2]).setDepth(-2)
+        const freeLayer = map.createLayer("free layer", plainDeco0).setDepth(-2)
+
         // movement controls
         this.wkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
         this.akey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
