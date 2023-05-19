@@ -7,10 +7,11 @@ export default class Game extends Phaser.Scene {
     skey!: Phaser.Input.Keyboard.Key
     dkey!: Phaser.Input.Keyboard.Key
     emitter!: EventDispatcher
-    player!: Phaser.Physics.Arcade.Sprite
+    player!: Phaser.Physics.Matter.Sprite
     playerFacingDir = "down"
-    playerSpeed = 100
+    playerSpeed = 1.6
     playerCam!: Phaser.Cameras.Scene2D.Camera
+    shadow!: Phaser.GameObjects.Image
 
     constructor() {
         super({ key: "Game" })
@@ -84,16 +85,27 @@ export default class Game extends Phaser.Scene {
         this.skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
         this.dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 
-        this.player = this.physics.add.sprite(467.5, 405, "player").setScale(3)
+        // create the players shadow before the player so that it is behind the player
+        this.shadow = this.add.image(0, 0, "shadow").setScale(0.4).setAlpha(0.5)
 
-        // set body size for Arcade physics
-        this.player.body.setSize(10, 13) // player hitbox
-        this.player.body.offset.x = 0
-        this.player.body.offset.y = 0.23
+        // create the player sprite
+        this.player = this.matter.add.sprite(467.5, 405, "player").setScale(1)
+
+        // set the player's hitbox and physics properties
+        this.player.setBody(
+            {
+                type: "rectangle",
+                width: 10, //player hitbox
+                height: 13,
+            },
+            { render: { sprite: { xOffset: 0, yOffset: 0.23 } } }
+        )
+        // .setIgnoreGravity(true)
+        // .setFixedRotation()
 
         // create camera and set to follow player
         this.playerCam = this.cameras.main.setBounds(0, 0, 1280, 1280)
-        // this.playerCam.zoom = 0 // camera zoom level
+        this.playerCam.zoom = 3 // camera zoom level
         // zooming the camera means that the top left of the screen is no longer positioned at (0,0)
         this.playerCam.startFollow(this.player)
 
@@ -103,19 +115,23 @@ export default class Game extends Phaser.Scene {
 
     update() {
         // Player Movement
-        this.player.setVelocity(0)
+        this.player.setVelocity(0, 0)
+
+        // place the shadow below the player
+        this.shadow.x = this.player.x
+        this.shadow.y = this.player.y + 4
 
         if (this.wkey.isDown) {
-            this.player.setVelocityY(-this.playerSpeed)
+            this.player.setVelocity(0, -this.playerSpeed)
             this.player.anims.play("upWalk", true)
         } else if (this.skey.isDown) {
-            this.player.setVelocityY(this.playerSpeed)
+            this.player.setVelocity(0, this.playerSpeed)
             this.player.anims.play("downWalk", true)
         } else if (this.akey.isDown) {
-            this.player.setVelocityX(-this.playerSpeed)
+            this.player.setVelocity(-this.playerSpeed, 0)
             this.player.anims.play("leftWalk", true)
         } else if (this.dkey.isDown) {
-            this.player.setVelocityX(this.playerSpeed)
+            this.player.setVelocity(this.playerSpeed, 0)
             this.player.anims.play("rightWalk", true)
         } else {
             // Idle animations

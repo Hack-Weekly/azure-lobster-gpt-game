@@ -7,6 +7,7 @@ export default class Preload extends Phaser.Scene {
     preload() {
         // player spritesheet and animation atlas
         this.load.atlas("player", "/player/playerSpritesheet.png", "/player/playerAtlas.json")
+        this.load.image("shadow", "/player/shadow.png")
 
         // map tilesets
         this.load.image("bridge", "/map/tilesets/bridge.png")
@@ -24,7 +25,7 @@ export default class Preload extends Phaser.Scene {
         this.load.image("water", "/map/tilesets/water.png")
         this.load.image("waterObjects", "/map/tilesets/waterObjects.png")
 
-        // map json
+        // map
         this.load.tilemapTiledJSON("tilemap", "/map/game-map.json")
     }
 
@@ -33,7 +34,7 @@ export default class Preload extends Phaser.Scene {
         this.anims.create({
             key: "downIdle",
             frames: this.anims.generateFrameNames("player", { prefix: "downIdle", start: 0, end: 1 }),
-            frameRate: 3,
+            frameRate: 2,
             repeat: -1,
         })
         this.anims.create({
@@ -45,7 +46,7 @@ export default class Preload extends Phaser.Scene {
         this.anims.create({
             key: "leftIdle",
             frames: this.anims.generateFrameNames("player", { prefix: "leftIdle", start: 0, end: 1 }),
-            frameRate: 3,
+            frameRate: 2,
             repeat: -1,
         })
         this.anims.create({
@@ -57,7 +58,7 @@ export default class Preload extends Phaser.Scene {
         this.anims.create({
             key: "rightIdle",
             frames: this.anims.generateFrameNames("player", { prefix: "rightIdle", start: 0, end: 1 }),
-            frameRate: 3,
+            frameRate: 2,
             repeat: -1,
         })
         this.anims.create({
@@ -69,7 +70,7 @@ export default class Preload extends Phaser.Scene {
         this.anims.create({
             key: "upIdle",
             frames: this.anims.generateFrameNames("player", { prefix: "upIdle", start: 0, end: 1 }),
-            frameRate: 3,
+            frameRate: 2,
             repeat: -1,
         })
         this.anims.create({
