@@ -89,7 +89,7 @@ export default class Game extends Phaser.Scene {
         this.shadow = this.add.image(0, 0, "shadow").setScale(0.4).setAlpha(0.5)
 
         // create the player sprite
-        this.player = this.matter.add.sprite(467.5, 405, "player").setScale(1)
+        this.player = this.matter.add.sprite(440, 800, "player").setScale(1)
 
         // set the player's hitbox and physics properties
         this.player.setBody(

@@ -12,7 +12,7 @@ const config: Phaser.Types.Core.GameConfig = {
         default: "matter",
         matter: {
             gravity: { y: 0 },
-            debug: false, // toggle for hitboxes
+            debug: true, // toggle for hitboxes
         },
     },
     scene: [Preload, Game],
