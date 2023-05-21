@@ -12,5 +12,10 @@ export default class Chat extends Phaser.Scene {
     }
     create() {
         console.log("Chat scene started")
+        this.emitter.on("updateHealth", this.openChat, this)
+        // create all the necessary UI elements here but make them invisible
+    }
+    openChat() {
+        // make all the UI elements visible
     }
 }

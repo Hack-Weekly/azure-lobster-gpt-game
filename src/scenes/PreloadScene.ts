@@ -9,24 +9,27 @@ export default class Preload extends Phaser.Scene {
         this.load.atlas("player", "/player/playerSpritesheet.png", "/player/playerAtlas.json")
         this.load.image("shadow", "/player/shadow.png")
 
-        // map tilesets
-        this.load.image("bridge", "/map/tilesets/bridge.png")
-        this.load.image("door", "/map/tilesets/door.png")
-        this.load.image("fences", "/map/tilesets/fences.png")
-        this.load.image("furniture", "/map/tilesets/furniture.png")
-        this.load.image("grassHillTall", "/map/tilesets/grassHillTall.png")
-        this.load.image("grassHillTiles", "/map/tilesets/grassHillTiles.png")
-        this.load.image("grassHillWater", "/map/tilesets/grassHillWater.png")
-        this.load.image("house", "/map/tilesets/house.png")
-        this.load.image("mailbox", "/map/tilesets/mailbox.png")
-        this.load.image("paths", "/map/tilesets/paths.png")
-        this.load.image("plantsRocks", "/map/tilesets/plantsRocks.png")
-        this.load.image("soil", "/map/tilesets/soil.png")
-        this.load.image("water", "/map/tilesets/water.png")
-        this.load.image("waterObjects", "/map/tilesets/waterObjects.png")
+        // // map tilesets
+        // this.load.image("bridge", "/map/tilesets/bridge.png")
+        // this.load.image("door", "/map/tilesets/door.png")
+        // this.load.image("fences", "/map/tilesets/fences.png")
+        // this.load.image("furniture", "/map/tilesets/furniture.png")
+        // this.load.image("grassHillTall", "/map/tilesets/grassHillTall.png")
+        // this.load.image("grassHillTiles", "/map/tilesets/grassHillTiles.png")
+        // this.load.image("grassHillWater", "/map/tilesets/grassHillWater.png")
+        // this.load.image("house", "/map/tilesets/house.png")
+        // this.load.image("mailbox", "/map/tilesets/mailbox.png")
+        // this.load.image("paths", "/map/tilesets/paths.png")
+        // this.load.image("plantsRocks", "/map/tilesets/plantsRocks.png")
+        // this.load.image("soil", "/map/tilesets/soil.png")
+        // this.load.image("water", "/map/tilesets/water.png")
+        // this.load.image("waterObjects", "/map/tilesets/waterObjects.png")
+
+        this.load.image("water", "/debugmap/Water.png")
+        this.load.image("grass", "/debugmap/Grass.png")
 
         // map
-        this.load.tilemapTiledJSON("tilemap", "/map/game-map.json")
+        this.load.tilemapTiledJSON("tilemap", "/debugmap/debugmap.json")
     }
 
     create() {

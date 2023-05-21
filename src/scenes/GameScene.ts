@@ -6,6 +6,7 @@ export default class Game extends Phaser.Scene {
     akey!: Phaser.Input.Keyboard.Key
     skey!: Phaser.Input.Keyboard.Key
     dkey!: Phaser.Input.Keyboard.Key
+    ekey!: Phaser.Input.Keyboard.Key
     emitter!: EventDispatcher
     player!: Phaser.Physics.Matter.Sprite
     playerFacingDir = "down"
@@ -29,61 +30,74 @@ export default class Game extends Phaser.Scene {
         // create tilemap for main map
         const map = this.make.tilemap({ key: "tilemap" })
 
-        // add all tileset images to tilemap
-        // the first argument is the name of the tileset in Tiled, the second is the key of the image in the cache
-        const waterObjects = map.addTilesetImage("Water Objects", "waterObjects")
+        // // add all tileset images to tilemap
+        // // the first argument is the name of the tileset in Tiled, the second is the key of the image in the cache
+        // const waterObjects = map.addTilesetImage("Water Objects", "waterObjects")
+        // const water = map.addTilesetImage("Water", "water")
+        // const soil = map.addTilesetImage("Tilled Dirt", "soil")
+        // const plantsRocks = map.addTilesetImage("Mushrooms, Flowers, Stones", "plantsRocks")
+        // const paths = map.addTilesetImage("Paths", "paths")
+        // const mailbox = map.addTilesetImage("Mailbox Animation Frames", "mailbox")
+        // const house = map.addTilesetImage("Wooden House", "house")
+        // const grassHillWater = map.addTilesetImage("Grass tiles with animates water-export", "grassHillWater")
+        // const grassHillTiles = map.addTilesetImage("Grass hill tiles v.2", "grassHillTiles")
+        // const grassHillTall = map.addTilesetImage("Tall Grass hill tiles v.2", "grassHillTall")
+        // const furniture = map.addTilesetImage("Basic Furniture", "furniture")
+        // const fences = map.addTilesetImage("Fences", "fences")
+        // const door = map.addTilesetImage("door animation sprites", "door")
+        // const bridge = map.addTilesetImage("Wood Bridge", "bridge")
+
         const water = map.addTilesetImage("Water", "water")
-        const soil = map.addTilesetImage("Tilled Dirt", "soil")
-        const plantsRocks = map.addTilesetImage("Mushrooms, Flowers, Stones", "plantsRocks")
-        const paths = map.addTilesetImage("Paths", "paths")
-        const mailbox = map.addTilesetImage("Mailbox Animation Frames", "mailbox")
-        const house = map.addTilesetImage("Wooden House", "house")
-        const grassHillWater = map.addTilesetImage("Grass tiles with animates water-export", "grassHillWater")
-        const grassHillTiles = map.addTilesetImage("Grass hill tiles v.2", "grassHillTiles")
-        const grassHillTall = map.addTilesetImage("Tall Grass hill tiles v.2", "grassHillTall")
-        const furniture = map.addTilesetImage("Basic Furniture", "furniture")
-        const fences = map.addTilesetImage("Fences", "fences")
-        const door = map.addTilesetImage("door animation sprites", "door")
-        const bridge = map.addTilesetImage("Wood Bridge", "bridge")
+        const grass = map.addTilesetImage("Grass tiles v.2", "grass")
 
-        // create the layers (order matters!)
+        // // create the layers (order matters!)
+        // const waterLayer = map.createLayer("water", water).setDepth(-1)
+        // const baseLayer = map.createLayer("base", [house, grassHillWater]).setDepth(-1)
+        // const hillsLayer = map.createLayer("hills", [house, grassHillWater, grassHillTiles, grassHillTall]).setDepth(-1)
+        // const soilLayer = map.createLayer("soil", soil).setDepth(-1)
+        // const greeneryLayer = map.createLayer("greenery", [plantsRocks, paths, waterObjects]).setDepth(-1)
+        // const manmadeLayer = map.createLayer("manmade", [house, door, bridge]).setDepth(-1)
+        // const fencesLayer = map.createLayer("fences", fences).setDepth(-1)
+        // const furnitureLayer = map.createLayer("furniture", [furniture, mailbox]).setDepth(-1)
+        // const roofLayer = map.createLayer("roof", house).setDepth(-1)
+
         const waterLayer = map.createLayer("water", water).setDepth(-1)
-        const baseLayer = map.createLayer("base", [house, grassHillWater]).setDepth(-1)
-        const hillsLayer = map.createLayer("hills", [house, grassHillWater, grassHillTiles, grassHillTall]).setDepth(-1)
-        const soilLayer = map.createLayer("soil", soil).setDepth(-1)
-        const greeneryLayer = map.createLayer("greenery", [plantsRocks, paths, waterObjects]).setDepth(-1)
-        const manmadeLayer = map.createLayer("manmade", [house, door, bridge]).setDepth(-1)
-        const fencesLayer = map.createLayer("fences", fences).setDepth(-1)
-        const furnitureLayer = map.createLayer("furniture", [furniture, mailbox]).setDepth(-1)
-        const roofLayer = map.createLayer("roof", house).setDepth(-1)
+        const grassLayer = map.createLayer("base", grass).setDepth(-1)
 
-        // create the collision boxes for each layer based on the custom property I set in the map editor
+        // // create the collision boxes for each layer based on the custom property I set in the map editor
+        // waterLayer.setCollisionByProperty({ collides: true })
+        // baseLayer.setCollisionByProperty({ collides: true })
+        // hillsLayer.setCollisionByProperty({ collides: true })
+        // soilLayer.setCollisionByProperty({ collides: true })
+        // greeneryLayer.setCollisionByProperty({ collides: true })
+        // manmadeLayer.setCollisionByProperty({ collides: true })
+        // fencesLayer.setCollisionByProperty({ collides: true })
+        // furnitureLayer.setCollisionByProperty({ collides: true })
+        // roofLayer.setCollisionByProperty({ collides: true })
+
         waterLayer.setCollisionByProperty({ collides: true })
-        baseLayer.setCollisionByProperty({ collides: true })
-        hillsLayer.setCollisionByProperty({ collides: true })
-        soilLayer.setCollisionByProperty({ collides: true })
-        greeneryLayer.setCollisionByProperty({ collides: true })
-        manmadeLayer.setCollisionByProperty({ collides: true })
-        fencesLayer.setCollisionByProperty({ collides: true })
-        furnitureLayer.setCollisionByProperty({ collides: true })
-        roofLayer.setCollisionByProperty({ collides: true })
+        grassLayer.setCollisionByProperty({ collides: true })
 
-        // add the layers and collision boxes to the game world
+        // // add the layers and collision boxes to the game world
+        // this.matter.world.convertTilemapLayer(waterLayer)
+        // this.matter.world.convertTilemapLayer(baseLayer)
+        // this.matter.world.convertTilemapLayer(hillsLayer)
+        // this.matter.world.convertTilemapLayer(soilLayer)
+        // this.matter.world.convertTilemapLayer(greeneryLayer)
+        // this.matter.world.convertTilemapLayer(manmadeLayer)
+        // this.matter.world.convertTilemapLayer(fencesLayer)
+        // this.matter.world.convertTilemapLayer(furnitureLayer)
+        // this.matter.world.convertTilemapLayer(roofLayer)
+
         this.matter.world.convertTilemapLayer(waterLayer)
-        this.matter.world.convertTilemapLayer(baseLayer)
-        this.matter.world.convertTilemapLayer(hillsLayer)
-        this.matter.world.convertTilemapLayer(soilLayer)
-        this.matter.world.convertTilemapLayer(greeneryLayer)
-        this.matter.world.convertTilemapLayer(manmadeLayer)
-        this.matter.world.convertTilemapLayer(fencesLayer)
-        this.matter.world.convertTilemapLayer(furnitureLayer)
-        this.matter.world.convertTilemapLayer(roofLayer)
+        this.matter.world.convertTilemapLayer(grassLayer)
 
         // movement controls
         this.wkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
         this.akey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
         this.skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
         this.dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        this.ekey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
 
         // create the players shadow before the player so that it is behind the player
         this.shadow = this.add.image(0, 0, "shadow").setScale(0.4).setAlpha(0.5)
@@ -114,6 +128,10 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
+        this.movement()
+        this.interaction()
+    }
+    movement() {
         // Player Movement
         this.player.setVelocity(0, 0)
 
@@ -147,6 +165,13 @@ export default class Game extends Phaser.Scene {
             if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === "rightWalk") {
                 this.player.anims.play("rightIdle", true)
             }
+        }
+    }
+    interaction() {
+        if (this.ekey.isDown) {
+            // this.scene.pause("Chat")
+            console.log("ekey pressed")
+            this.emitter.emit("openChatWindow")
         }
     }
 }

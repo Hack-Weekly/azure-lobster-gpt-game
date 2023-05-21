@@ -2,6 +2,7 @@ import Phaser from "phaser"
 
 import Game from "./scenes/GameScene"
 import Preload from "./scenes/PreloadScene"
+import Chat from "./scenes/ChatScene"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
             debug: true, // toggle for hitboxes
         },
     },
-    scene: [Preload, Game],
+    scene: [Preload, Game, Chat],
     pixelArt: true,
     render: {
         antialias: false,
