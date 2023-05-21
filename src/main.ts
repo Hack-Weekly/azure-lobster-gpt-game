@@ -17,6 +17,9 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
     scene: [Preload, Game, Chat],
+    dom: {
+        createContainer: true,
+    },
     pixelArt: true,
     render: {
         antialias: false,

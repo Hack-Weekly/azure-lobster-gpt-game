@@ -170,7 +170,6 @@ export default class Game extends Phaser.Scene {
     interaction() {
         if (this.ekey.isDown) {
             // this.scene.pause("Chat")
-            console.log("ekey pressed")
             this.emitter.emit("openChatWindow")
         }
     }
