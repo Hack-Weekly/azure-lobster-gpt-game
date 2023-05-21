@@ -39,23 +39,23 @@ export default class Game extends Phaser.Scene {
         const mailbox = map.addTilesetImage("Mailbox Animation Frames", "mailbox")
         const house = map.addTilesetImage("Wooden House", "house")
         const grassHillWater = map.addTilesetImage("Grass tiles with animates water-export", "grassHillWater")
-        const grassHillTiles = map.addTilesetImage("Grass hill tiles", "grassHillTiles")
-        const grassHillTall = map.addTilesetImage("Tall Grass hill tiles", "grassHillTall")
+        const grassHillTiles = map.addTilesetImage("Grass hill tiles v.2", "grassHillTiles")
+        const grassHillTall = map.addTilesetImage("Tall Grass hill tiles v.2", "grassHillTall")
         const furniture = map.addTilesetImage("Basic Furniture", "furniture")
         const fences = map.addTilesetImage("Fences", "fences")
         const door = map.addTilesetImage("door animation sprites", "door")
         const bridge = map.addTilesetImage("Wood Bridge", "bridge")
 
         // create the layers (order matters!)
-        const waterLayer = map.createLayer("water", [water]).setDepth(-1)
+        const waterLayer = map.createLayer("water", water).setDepth(-1)
         const baseLayer = map.createLayer("base", [house, grassHillWater]).setDepth(-1)
         const hillsLayer = map.createLayer("hills", [house, grassHillWater, grassHillTiles, grassHillTall]).setDepth(-1)
-        const soilLayer = map.createLayer("soil", [soil]).setDepth(-1)
+        const soilLayer = map.createLayer("soil", soil).setDepth(-1)
         const greeneryLayer = map.createLayer("greenery", [plantsRocks, paths, waterObjects]).setDepth(-1)
         const manmadeLayer = map.createLayer("manmade", [house, door, bridge]).setDepth(-1)
-        const fencesLayer = map.createLayer("fences", [fences]).setDepth(-1)
+        const fencesLayer = map.createLayer("fences", fences).setDepth(-1)
         const furnitureLayer = map.createLayer("furniture", [furniture, mailbox]).setDepth(-1)
-        const roofLayer = map.createLayer("roof", [house]).setDepth(-1)
+        const roofLayer = map.createLayer("roof", house).setDepth(-1)
 
         // create the collision boxes for each layer based on the custom property I set in the map editor
         waterLayer.setCollisionByProperty({ collides: true })
@@ -95,10 +95,10 @@ export default class Game extends Phaser.Scene {
         this.player.setBody(
             {
                 type: "rectangle",
-                width: 10, //player hitbox
-                height: 13,
+                width: 8, //player hitbox
+                height: 10,
             },
-            { render: { sprite: { xOffset: 0, yOffset: 0.23 } } }
+            { render: { sprite: { xOffset: 0, yOffset: 0.17 } } }
         )
         // .setIgnoreGravity(true)
         // .setFixedRotation()
