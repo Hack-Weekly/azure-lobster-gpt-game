@@ -29,6 +29,27 @@ export default class Game extends Phaser.Scene {
 
         // create tilemap for main map
         const map = this.make.tilemap({ key: "tilemap" })
+        // add all tileset images to tilemap
+        const plain = map.addTilesetImage("plain_", "plain")
+        const plainCliff = map.addTilesetImage("plainCliff_", "plainCliff")
+        const plainDeco0 = map.addTilesetImage("plainDecoration_0", "plainDeco0")
+        const plainDeco1 = map.addTilesetImage("plainDecoration_1", "plainDeco1")
+        const plainDeco2 = map.addTilesetImage("plainDecoration_2", "plainDeco2")
+        const path = map.addTilesetImage("path_", "path")
+
+        // create the layers we want in the right order
+        const groundLayer = map.createLayer("base layer", [plain, plainCliff, path]).setDepth(-2)
+        const bridgeLayer = map.createLayer("base 2", [plainDeco1, plainDeco2]).setDepth(-2)
+        const freeLayer = map.createLayer("free layer", plainDeco0).setDepth(-2)
+        const obstacleLayer = map.createLayer("obstacle layer", [plainDeco0, plainDeco2]).setDepth(2)
+
+        groundLayer.setCollisionByProperty({ collides: true })
+        obstacleLayer.setCollisionByProperty({ collides: true })
+        bridgeLayer.setCollisionByProperty({ collides: true })
+
+        this.matter.world.convertTilemapLayer(groundLayer)
+        this.matter.world.convertTilemapLayer(obstacleLayer)
+        this.matter.world.convertTilemapLayer(bridgeLayer)
 
         // // add all tileset images to tilemap
         // // the first argument is the name of the tileset in Tiled, the second is the key of the image in the cache
@@ -47,9 +68,6 @@ export default class Game extends Phaser.Scene {
         // const door = map.addTilesetImage("door animation sprites", "door")
         // const bridge = map.addTilesetImage("Wood Bridge", "bridge")
 
-        const water = map.addTilesetImage("Water", "water")
-        const grass = map.addTilesetImage("Grass tiles v.2", "grass")
-
         // // create the layers (order matters!)
         // const waterLayer = map.createLayer("water", water).setDepth(-1)
         // const baseLayer = map.createLayer("base", [house, grassHillWater]).setDepth(-1)
@@ -60,9 +78,6 @@ export default class Game extends Phaser.Scene {
         // const fencesLayer = map.createLayer("fences", fences).setDepth(-1)
         // const furnitureLayer = map.createLayer("furniture", [furniture, mailbox]).setDepth(-1)
         // const roofLayer = map.createLayer("roof", house).setDepth(-1)
-
-        const waterLayer = map.createLayer("water", water).setDepth(-1)
-        const grassLayer = map.createLayer("base", grass).setDepth(-1)
 
         // // create the collision boxes for each layer based on the custom property I set in the map editor
         // waterLayer.setCollisionByProperty({ collides: true })
@@ -75,9 +90,6 @@ export default class Game extends Phaser.Scene {
         // furnitureLayer.setCollisionByProperty({ collides: true })
         // roofLayer.setCollisionByProperty({ collides: true })
 
-        waterLayer.setCollisionByProperty({ collides: true })
-        grassLayer.setCollisionByProperty({ collides: true })
-
         // // add the layers and collision boxes to the game world
         // this.matter.world.convertTilemapLayer(waterLayer)
         // this.matter.world.convertTilemapLayer(baseLayer)
@@ -88,9 +100,6 @@ export default class Game extends Phaser.Scene {
         // this.matter.world.convertTilemapLayer(fencesLayer)
         // this.matter.world.convertTilemapLayer(furnitureLayer)
         // this.matter.world.convertTilemapLayer(roofLayer)
-
-        this.matter.world.convertTilemapLayer(waterLayer)
-        this.matter.world.convertTilemapLayer(grassLayer)
 
         // movement controls
         this.wkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
@@ -106,16 +115,18 @@ export default class Game extends Phaser.Scene {
         this.player = this.matter.add.sprite(440, 800, "player").setScale(1)
 
         // set the player's hitbox and physics properties
-        this.player.setBody(
-            {
-                type: "rectangle",
-                width: 8, //player hitbox
-                height: 10,
-            },
-            { render: { sprite: { xOffset: 0, yOffset: 0.17 } } }
-        )
-        // .setIgnoreGravity(true)
-        // .setFixedRotation()
+        this.player
+            .setBody(
+                {
+                    type: "rectangle",
+                    width: 8, //player hitbox
+                    height: 10,
+                },
+                { render: { sprite: { xOffset: 0, yOffset: 0.17 } } }
+            )
+            // @ts-ignore
+            .setIgnoreGravity(true)
+            .setFixedRotation()
 
         // create camera and set to follow player
         this.playerCam = this.cameras.main.setBounds(0, 0, 1280, 1280)
@@ -129,7 +140,7 @@ export default class Game extends Phaser.Scene {
 
     update() {
         this.movement()
-        this.interaction()
+        this.handleInteraction()
     }
     movement() {
         // Player Movement
@@ -167,9 +178,15 @@ export default class Game extends Phaser.Scene {
             }
         }
     }
-    interaction() {
+    handleInteraction() {
         if (this.ekey.isDown) {
-            // this.scene.pause("Chat")
+            // Disable movement controls
+            this.wkey.enabled = false
+            this.akey.enabled = false
+            this.skey.enabled = false
+            this.dkey.enabled = false
+            this.ekey.enabled = false
+
             this.emitter.emit("openChatWindow")
         }
     }

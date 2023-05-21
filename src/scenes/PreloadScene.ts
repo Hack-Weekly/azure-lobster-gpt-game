@@ -25,11 +25,13 @@ export default class Preload extends Phaser.Scene {
         // this.load.image("water", "/map/tilesets/water.png")
         // this.load.image("waterObjects", "/map/tilesets/waterObjects.png")
 
-        this.load.image("water", "/debugmap/Water.png")
-        this.load.image("grass", "/debugmap/Grass.png")
-
-        // map
-        this.load.tilemapTiledJSON("tilemap", "/debugmap/debugmap.json")
+        this.load.image("plain", "map/tileset_images/plain_.png")
+        this.load.image("plainCliff", "map/tileset_images/plainCliff_.png")
+        this.load.image("plainDeco0", "map/tileset_images/plainDecoration_0.png")
+        this.load.image("plainDeco1", "map/tileset_images/plainDecoration_1.png")
+        this.load.image("plainDeco2", "map/tileset_images/plainDecoration_2.png")
+        this.load.image("path", "map/tileset_images/path_.png")
+        this.load.tilemapTiledJSON("tilemap", "map/testmap.json")
     }
 
     create() {

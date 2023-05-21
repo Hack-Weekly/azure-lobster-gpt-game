@@ -42,6 +42,7 @@ export default class Chat extends Phaser.Scene {
     openChat() {
         // make chat window visible
         this.chatWindow.style.display = "block"
+        this.scene.pause("Game")
     }
 
     sendMessage(event: Event) {
