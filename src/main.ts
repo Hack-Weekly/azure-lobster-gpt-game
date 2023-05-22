@@ -2,6 +2,7 @@ import Phaser from "phaser"
 
 import Game from "./scenes/GameScene"
 import Preload from "./scenes/PreloadScene"
+import Chat from "./scenes/ChatScene"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -9,9 +10,16 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 800,
     height: 600,
     physics: {
-        default: "arcade",
+        default: "matter",
+        matter: {
+            gravity: { y: 0 },
+            debug: true, // toggle for hitboxes
+        },
     },
-    scene: [Preload, Game],
+    scene: [Preload, Game, Chat],
+    dom: {
+        createContainer: true,
+    },
     pixelArt: true,
     render: {
         antialias: false,
