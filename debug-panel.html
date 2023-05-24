@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <div>
+            <div>game id:</div>
+            <div id="game-id"></div>
+            <br>
+            <div id="not-chat">
+                <div>NPCs:</div>
+                <div id="npc-list"></div>
+                <br>
+                <div>Events:</div>
+                <div id="event-list"></div>
+            </div>
+            <div id="chat" hidden>
+                <span>Talking to:</span>
+                <div id="chat-npc-name"></div>
+                <div id="message-list"></div>
+                <div>
+                    <input id="message-input" type="text" disabled />
+                    <button id="send-button" disabled>send</button>
+                    <img id="loading-icon" src="https://upload.wikimedia.org/wikipedia/commons/4/42/Loading.gif" />
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="module" src="src/debug-panel.ts"></script>
+</html>
