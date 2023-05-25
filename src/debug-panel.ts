@@ -142,5 +142,6 @@ function setView(chatting: boolean, npcName?: string) {
     } else {
         chat.setAttribute("hidden", "")
         npcs.removeAttribute("hidden")
+        document.getElementById("message-list")!.innerHTML = ""
     }
 }
