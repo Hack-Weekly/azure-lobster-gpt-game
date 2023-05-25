@@ -115,18 +115,17 @@ export default class Game extends Phaser.Scene {
         this.player = this.matter.add.sprite(440, 800, "player").setScale(1)
 
         // set the player's hitbox and physics properties
-        this.player
-            .setBody(
-                {
-                    type: "rectangle",
-                    width: 8, //player hitbox
-                    height: 10,
-                },
-                { render: { sprite: { xOffset: 0, yOffset: 0.17 } } }
-            )
-            // @ts-ignore
-            .setIgnoreGravity(true)
-            .setFixedRotation()
+        this.player.setBody(
+            {
+                type: "rectangle",
+                width: 8, //player hitbox
+                height: 10,
+            },
+            { render: { sprite: { xOffset: 0, yOffset: 0.17 } } }
+        )
+
+        this.player.setIgnoreGravity(true)
+        this.player.setFixedRotation()
 
         // create camera and set to follow player
         this.playerCam = this.cameras.main.setBounds(0, 0, 1280, 1280)
@@ -180,12 +179,12 @@ export default class Game extends Phaser.Scene {
     }
     handleInteraction() {
         if (this.ekey.isDown) {
-            // Disable movement controls
-            this.wkey.enabled = false
-            this.akey.enabled = false
-            this.skey.enabled = false
-            this.dkey.enabled = false
-            this.ekey.enabled = false
+            // Remove the existing listeners
+            this.input.keyboard.removeKey(this.wkey)
+            this.input.keyboard.removeKey(this.akey)
+            this.input.keyboard.removeKey(this.skey)
+            this.input.keyboard.removeKey(this.dkey)
+            this.input.keyboard.removeKey(this.ekey)
 
             this.emitter.emit("openChatWindow")
         }

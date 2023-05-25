@@ -20,21 +20,32 @@ export default class Chat extends Phaser.Scene {
 
         // create chat window
         const chatWindowHTML = `
-        <div id="chat-window" style="background-color: white; width: 400px; height: 300px; overflow: auto; display: none; padding: 10px; box-sizing: border-box;">
-    <div id="chat-history" style="padding: 10px; box-sizing: border-box;"></div>
-    <form id="message-form" style="position: absolute; bottom: 0; width: 100%; padding: 10px; background: #eee; box-sizing: border-box;">
-        <input id="message-input" type="text" style="width: 80%; padding: 5px; border-radius: 10px; border: 1px solid #ccc;" placeholder="Enter message..." />
-        <button type="submit" style="width: 18%; margin-left: 2%; padding: 5px; border-radius: 10px; border: 1px solid #ccc; background-color: #0084ff; color: white;">Send</button>
-    </form>
-</div>
+        <head>
+            <link rel="stylesheet" href="chat/chat.css" />
+        </head>
+        <body>
+            <div id="chat-window">
+                <div id="chat-container" class="container">
+
+                </div>
+                <form id="input-container">
+                    <input type="text" id="user-input" placeholder="Type your message...">
+                    <button id="send-button">Send</button>
+                </form>
+            </div>
+        </body>
 
         `
 
-        this.chatElement = this.add.dom(400, 300, "div")
+        this.chatElement = this.add.dom(150, 100, "html")
         this.chatElement.createFromHTML(chatWindowHTML)
         this.chatWindow = this.chatElement.getChildByID("chat-window") as HTMLElement
-        this.chatElement.addListener("submit")
-        this.chatElement.on("submit", this.sendMessage, this)
+
+        const messageForm = this.chatElement.getChildByID("input-container") as HTMLFormElement
+        messageForm.addEventListener("submit", (event: Event) => {
+            event.preventDefault()
+            this.sendMessage()
+        })
 
         // make chat window invisible initially
         this.chatWindow.style.display = "none"
@@ -43,19 +54,18 @@ export default class Chat extends Phaser.Scene {
     openChat() {
         // make chat window visible
         this.chatWindow.style.display = "block"
-        this.scene.pause("Game")
+        // this.scene.pause("Game")
     }
 
-    sendMessage(event: Event) {
-        event.preventDefault()
-
+    sendMessage() {
         // get the message input
-        const messageInput = this.chatElement.getChildByID("message-input") as HTMLInputElement
+        const messageInput = this.chatElement.getChildByID("user-input") as HTMLInputElement
         const message = messageInput.value
 
         // add message to chat history
-        const chatHistory = this.chatElement.getChildByID("chat-history") as HTMLElement
-        const messageHTML = `<div style="max-width: 60%; padding: 10px; margin-bottom: 10px; background-color: #0084ff; color: white; border-radius: 20px; clear: both; float: right;">${message}</div>`
+        const chatHistory = this.chatElement.getChildByID("chat-container") as HTMLElement
+        const messageHTML = `<div class="message user-message" style="background-color: #333; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 5px; align-self: flex-end; word-wrap: break-word; overflow-wrap: break-word; max-width: 80%;">${message}</div>`
+
         chatHistory.innerHTML += messageHTML
 
         // clear the message input
