@@ -11,7 +11,11 @@ document.getElementById("message-input")!.addEventListener("keyup", (e) => {
     }
 })
 
-addNpc({ name: "Kickball", description: "test npc description", location: "test npc location" })
+document.getElementById("end-chat-button")!.addEventListener("click", () => {
+    ServerState.endChat()
+})
+
+addNpc({ name: "Rye", description: "test npc description", location: "test npc location" })
 
 ServerState.startGame()
     .then((name) => {
@@ -29,20 +33,81 @@ ServerState.startGame()
 async function sendMessage() {
     let messageInput = document.getElementById("message-input") as HTMLInputElement
     let message = messageInput.value.trim()
-    if (message.length === 0) {
-        return
-    }
+    if (message.length === 0) return
+
     setLoading(true)
-    let ele = document.createElement("div")
-    ele.innerText = "You: " + message
-    document.getElementById("message-list")!.append(ele)
-    messageInput.value = ""
+
+    try {
+        let stream = await ServerState.continueChat(message)
+        await readReply(stream)
+    } catch (error) {
+        console.log("Error starting chat")
+        console.error(error)
+        alert("Error starting chat: " + (error as Error).message)
+        setView(false)
+    } finally {
+        setLoading(false)
+    }
 }
 
-function appendEvent(message: string) {
+async function startChat(npcName: string) {
+    setView(true, npcName)
+    setLoading(true)
+    try {
+        let stream = await ServerState.startChat(npcName)
+        await readReply(stream)
+    } catch (error) {
+        console.log("Error starting chat")
+        console.error(error)
+        alert("Error starting chat: " + (error as Error).message)
+        setView(false)
+    } finally {
+        setLoading(false)
+    }
+}
+
+async function readReply(stream: any) {
+    let messageEle = document.createElement("div")
+    messageEle.innerText = `Reply: `
+
+    document.getElementById("message-list")!.append(messageEle)
+
+    let choice
+    let replySoFar = ""
+
+    let part = await stream.read()
+    while (part !== null && !part.done) {
+        console.log(part.value)
+        let o = JSON.parse(part.value)
+
+        if (o.type == "content") {
+            replySoFar += o.content
+            if (!choice && replySoFar.includes("\n")) {
+                choice = replySoFar.substring(0, replySoFar.indexOf("\n"))
+                messageEle!.innerText += replySoFar.substring(replySoFar.indexOf("\n") + 1)
+            } else {
+                messageEle!.innerText += o.content
+            }
+        }
+
+        part = await stream.read()
+    }
+}
+
+function addNpc(npc: NPCState) {
     let ele = document.createElement("div")
-    ele.innerText = message
-    document.getElementById("events")!.append(ele)
+    ele.innerText = "Name: " + npc.name + "\nDescription: " + npc.description + "\nLocation: " + npc.location
+
+    let startChatButton = document.createElement("button")
+    startChatButton.innerText = "Start Chat"
+
+    startChatButton.addEventListener("click", () => startChat(npc.name))
+
+    let div = document.createElement("div")
+    div.append(startChatButton)
+    ele.append(div)
+
+    document.getElementById("npc-list")!.append(ele)
 }
 
 function setLoading(loading: boolean) {
@@ -51,11 +116,11 @@ function setLoading(loading: boolean) {
     let messageInput = document.getElementById("message-input") as HTMLInputElement
 
     if (loading) {
-        loadingIcon.setAttribute("display", "visible")
+        loadingIcon.removeAttribute("hidden")
         sendButton.setAttribute("disabled", "")
         messageInput.setAttribute("disabled", "")
     } else {
-        loadingIcon.setAttribute("display", "hidden")
+        loadingIcon.setAttribute("hidden", "")
         sendButton.removeAttribute("disabled")
         messageInput.removeAttribute("disabled")
     }
@@ -72,66 +137,4 @@ function setView(chatting: boolean, npcName?: string) {
         chat.setAttribute("hidden", "")
         npcs.removeAttribute("hidden")
     }
-}
-
-async function startChat(npcName: string) {
-    setView(true, npcName)
-    setLoading(true)
-    try {
-        await ServerState.startChat(npcName)
-    } catch (error) {
-        console.log("Error starting chat")
-        console.error(error)
-        alert("Error starting chat: " + (error as Error).message)
-        setView(false)
-    } finally {
-        let messageEle = document.createElement("div")
-        messageEle.innerText = npcName + ": "
-        document.getElementById("message-list")!.append(messageEle)
-        await readIncomingMessage(messageEle)
-        setLoading(false)
-    }
-}
-
-async function readIncomingMessage(messageEle: HTMLDivElement) {
-    let stream
-    try {
-        stream = await ServerState.getGptReplyStream()
-    } catch (err) {
-        console.log("Error getting GPT reply stream")
-        console.log(err)
-        alert("Error getting GPT reply stream: " + (err as Error).message)
-        return
-    }
-
-    let decoder = new TextDecoder()
-    try {
-        let chunk = await stream.read()
-        while (chunk !== null) {
-            let message = decoder.decode(chunk.value)
-            messageEle!.innerText += message
-            chunk = await stream.read()
-        }
-    } catch (err) {
-        console.log("Error reading GPT reply stream")
-        console.log(err)
-        alert("Error reading GPT reply stream: " + (err as Error).message)
-    }
-}
-
-function addNpc(npc: NPCState) {
-    let ele = document.createElement("div")
-    ele.innerText = "Name:" + npc.name + "\nDescription:" + npc.description + "\nLocation:" + npc.location
-    ele.id = "npc-" + npc.name
-
-    let startChatButton = document.createElement("button")
-    startChatButton.innerText = "Start Chat"
-
-    startChatButton.addEventListener("click", () => startChat(npc.name))
-
-    let div = document.createElement("div")
-    div.append(startChatButton)
-    ele.append(div)
-
-    document.getElementById("npc-list")!.append(ele)
 }
