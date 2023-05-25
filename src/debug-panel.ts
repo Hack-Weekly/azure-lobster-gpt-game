@@ -39,7 +39,7 @@ async function sendMessage() {
 
     try {
         let stream = await ServerState.continueChat(message)
-        await readReply(stream)
+        await readReply(stream, true)
     } catch (error) {
         console.log("Error starting chat")
         console.error(error)
@@ -55,7 +55,7 @@ async function startChat(npcName: string) {
     setLoading(true)
     try {
         let stream = await ServerState.startChat(npcName)
-        await readReply(stream)
+        await readReply(stream, false)
     } catch (error) {
         console.log("Error starting chat")
         console.error(error)
@@ -66,14 +66,13 @@ async function startChat(npcName: string) {
     }
 }
 
-async function readReply(stream: any) {
+async function readReply(stream: any, expectChoice: boolean) {
     let messageEle = document.createElement("div")
     messageEle.innerText = `Reply: `
 
     document.getElementById("message-list")!.append(messageEle)
 
-    let choice
-    let replySoFar = ""
+    let choice = ""
 
     let part = await stream.read()
     while (part !== null && !part.done) {
@@ -81,16 +80,23 @@ async function readReply(stream: any) {
         let o = JSON.parse(part.value)
 
         if (o.type == "content") {
-            replySoFar += o.content
-            if (!choice && replySoFar.includes("\n")) {
-                choice = replySoFar.substring(0, replySoFar.indexOf("\n"))
-                messageEle!.innerText += replySoFar.substring(replySoFar.indexOf("\n") + 1)
+            if (expectChoice) {
+                if (o.content.includes("\n")) {
+                    expectChoice = false
+                    choice += o.content.substring(0, o.content.indexOf("\n"))
+                } else {
+                    choice += o.content
+                }
             } else {
                 messageEle!.innerText += o.content
             }
         }
 
         part = await stream.read()
+    }
+
+    if (choice.includes("SAY_GOODBYE")) {
+        setView(false)
     }
 }
 
