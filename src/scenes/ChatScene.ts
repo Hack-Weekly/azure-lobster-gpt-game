@@ -10,7 +10,7 @@ export default class Chat extends Phaser.Scene {
         super({ key: "Chat" })
     }
 
-    preload() {
+    preload() { //preloads required assets or resources for the scene
         this.emitter = EventDispatcher.getInstance()
     }
 

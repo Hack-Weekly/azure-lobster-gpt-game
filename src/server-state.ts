@@ -3,7 +3,9 @@ const BASE_URL = "http://localhost:3000"
 let gameId: string | null = null
 let npcs: NPCState[] | null = null
 
-export async function startGame(): Promise<string> {
+//sends a POST request to the server to start a new game
+//returns a promise that resolves with the game ID as a string
+export async function startGame(): Promise<string> { 
     let res = await fetch(BASE_URL + "/start-game", {
         method: "POST",
     })
@@ -13,6 +15,8 @@ export async function startGame(): Promise<string> {
     return gameId!
 }
 
+//sends a POST request to the server to start a chat with a specific NPC
+//returns a readable stream reader that can be used to read chat messages from the server
 export async function startChat(npcName: string) {
     let res = await fetch(BASE_URL + "/start-chat", {
         method: "POST",
@@ -20,13 +24,15 @@ export async function startChat(npcName: string) {
         body: JSON.stringify({ npcName: npcName }),
     })
 
-    if (!res.ok) throw new Error(`start-chat failed ${res.status}`)
+    if (!res.ok) throw new Error(`start-chat failed ${res.status}`) //if request was not successful, throws error
 
-    let transformStream = new TransformStream()
-    pipeToChunks(res.body!.getReader(), transformStream.writable.getWriter())
+    let transformStream = new TransformStream() //to process response body as chunks of data
+    pipeToChunks(res.body!.getReader(), transformStream.writable.getWriter()) //pipes response body to transform stream
     return transformStream.readable.getReader()
 }
 
+//sends a POST request to the server to continue a chat by sending a message
+//returns a readable stream reader that can be used to read chat messages from the server
 export async function continueChat(message: string) {
     let res = await fetch(BASE_URL + "/continue-chat", {
         method: "POST",
@@ -41,6 +47,7 @@ export async function continueChat(message: string) {
     return transformStream.readable.getReader()
 }
 
+//sends a POST request to the server to end the current chat session
 export async function endChat() {
     let res = await fetch(BASE_URL + "/end-chat", {
         method: "POST",
@@ -50,8 +57,9 @@ export async function endChat() {
     if (!res.ok) throw new Error(`end-chat failed ${res.status}`)
 }
 
+//helper function that pipes data from a readable stream to a writable stream in chunks
 async function pipeToChunks(reader: ReadableStreamDefaultReader, writer: WritableStreamDefaultWriter) {
-    let decoder = new TextDecoder()
+    let decoder = new TextDecoder() //to decode incoming chunks
     let chunk = await reader.read()
     while (chunk !== null && !chunk.done) {
         let lines = decoder

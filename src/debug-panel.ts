@@ -1,4 +1,4 @@
-import * as ServerState from "./server-state.js"
+import * as ServerState from "./server-state.js" //ServerState contains functions related to server-side game and chat functionality
 import { NPCState } from "./server-state.js"
 
 document.getElementById("send-button")!.addEventListener("click", () => {
@@ -27,7 +27,7 @@ ServerState.startGame()
         console.log(error)
     })
     .finally(() => {
-        setLoading(false)
+        setLoading(false) //hides loading icon and enables send button and message input
     })
 
 async function sendMessage() {
@@ -35,7 +35,7 @@ async function sendMessage() {
     let message = messageInput.value.trim()
     if (message.length === 0) return
 
-    setLoading(true)
+    setLoading(true) //shows loading icon and disables send button and message input
 
     try {
         let stream = await ServerState.continueChat(message)
@@ -50,8 +50,9 @@ async function sendMessage() {
     }
 }
 
+//starts chat with NPC
 async function startChat(npcName: string) {
-    setView(true, npcName)
+    setView(true, npcName) //sets NPC name in the chat view and shows chat view and hides NPC view
     setLoading(true)
     try {
         let stream = await ServerState.startChat(npcName)
@@ -60,12 +61,13 @@ async function startChat(npcName: string) {
         console.log("Error starting chat")
         console.error(error)
         alert("Error starting chat: " + (error as Error).message)
-        setView(false)
+        setView(false) //hides chat view, shows NPC view and clears message list in user interface 
     } finally {
         setLoading(false)
     }
 }
 
+//reads and processes chat reply from the server
 async function readReply(stream: any, expectChoice: boolean) {
     let messageEle = document.createElement("div")
     messageEle.innerText = `Reply: `
@@ -132,6 +134,7 @@ function setLoading(loading: boolean) {
     }
 }
 
+//sets the view of the user interface for either the chatting or non-chatting state
 function setView(chatting: boolean, npcName?: string) {
     let chat = document.getElementById("chat") as HTMLDivElement
     let npcs = document.getElementById("not-chat") as HTMLDivElement
