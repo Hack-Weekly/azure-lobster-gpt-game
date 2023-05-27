@@ -1,3 +1,4 @@
+//sets up the game world including the tilemap, player sprite, camera, movement controls and interaction handling
 import Phaser from "phaser"
 import EventDispatcher from "../utils/EventDispatcher"
 
@@ -137,6 +138,7 @@ export default class Game extends Phaser.Scene {
         this.scene.launch("Chat")
     }
 
+    //called continuously during gameplay
     update() {
         this.movement()
         this.handleInteraction()
